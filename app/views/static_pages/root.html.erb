@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Title of the document</title>
-
-
-
+<title>Bejeweled</title>
 	<script type="text/javascript" charset="utf-8">
 		$(document).ready(function(){
 			var board = new boardLib.Board();
-
+      $(".tile").click(function(event) {
+        board.handleClick(event);
+      });
 		});
 	</script>
 </head>
