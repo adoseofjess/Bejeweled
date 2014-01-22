@@ -6,6 +6,7 @@
     this.renderBoard();
     this.renderGems();
     this.clickedGems = [];
+    this.score = 0;
 	};
   
 	Board.prototype.renderBoard = function() {
@@ -25,19 +26,20 @@
     for (var i = 0; i < this.dimension; i++) {
 			for (var j = 0; j < this.dimension; j++) {
 				var idName = '#'+'row'+i+'col'+(this.dimension-1-j);
-				
         var gem = this.gemList[Math.floor((Math.random()*5))];
-        
         $(idName).addClass(gem);
+        
+        while (!this.noGemLine($(idName))) {
+          $(idName).removeClass(gem);
+          gem = this.gemList[Math.floor((Math.random()*5))];
+          $(idName).addClass(gem);
+        }
 			}
 		}
-    
-
 	};
   
   Board.prototype.handleClick = function(event) {
     var gem = $(event.currentTarget)
-    console.log(gem);
     var gem_color = $(event.currentTarget).attr("class").split(" ")[1]
     if (this.clickedGems.length == 2) {
       this.clearClickedGems();
@@ -99,8 +101,6 @@
   Board.prototype.checkGemLine = function(gem) {
 
     var gem_location = gem.attr("id").split("row")[1].split("col");
-    // if this is 2,2
-    // the original gem: gem.attr("class").split(" ")[1]
     var gem_color = gem.attr("class").split(" ")[1];
     var foundGemLine = ["#"+gem.attr("id")];
     var checkGemLine = [[], [], [], [], [], []];
@@ -109,7 +109,6 @@
       var idName = '#'+'row'+(parseInt(gem_location[0])+i)+'col'+gem_location[1];
       if ($(idName).length != 0) {
         checkGemLine[0].push([$(idName).attr("class").split(" ")[1], idName]);
-        
       }
     }
     
@@ -158,6 +157,8 @@
       if (checkGemLine[i].length == 2) {
         
         if ((checkGemLine[i][0][0] == checkGemLine[i][1][0]) && (checkGemLine[i][1][0] == gem_color)) {
+          
+    
           foundGemLine.push(checkGemLine[i][0][1]);
           foundGemLine.push(checkGemLine[i][1][1]);
         }
@@ -166,6 +167,81 @@
     
     if (foundGemLine.length != 1) {
       this.removeGems(foundGemLine);
+    }
+  };
+  
+  Board.prototype.noGemLine = function(gem) {
+
+    var gem_location = gem.attr("id").split("row")[1].split("col");
+    var gem_color = gem.attr("class").split(" ")[1];
+    var foundGemLine = ["#"+gem.attr("id")];
+    var checkGemLine = [[], [], [], [], [], []];
+
+    for (var i = 1; i < 3; i++) {
+      var idName = '#'+'row'+(parseInt(gem_location[0])+i)+'col'+gem_location[1];
+      if ($(idName).length != 0) {
+        checkGemLine[0].push([$(idName).attr("class").split(" ")[1], idName]);
+      }
+    }
+    
+    for (var i = 1; i < 3; i++) {
+      var idName = '#'+'row'+(parseInt(gem_location[0])-i)+'col'+gem_location[1];
+      if ($(idName).length != 0) {
+        checkGemLine[1].push([$(idName).attr("class").split(" ")[1], idName]);
+      }
+    }
+    
+    for (var i = 1; i < 3; i++) {
+      var idName = '#'+'row'+gem_location[0]+'col'+(parseInt(gem_location[1])-i);
+      if ($(idName).length != 0) {
+        checkGemLine[2].push([$(idName).attr("class").split(" ")[1], idName]);
+      }  
+    }
+    
+    for (var i = 1; i < 3; i++) {
+      var idName = '#'+'row'+gem_location[0]+'col'+(parseInt(gem_location[1])+i);
+      if ($(idName).length != 0) {
+        checkGemLine[3].push([$(idName).attr("class").split(" ")[1], idName]);
+      }
+    }
+    
+    // check for the cases when the gem is in the middle
+    var idName1 = '#'+'row'+(parseInt(gem_location[0])-1)+'col'+gem_location[1];
+    var idName2 = '#'+'row'+(parseInt(gem_location[0])+1)+'col'+gem_location[1];
+    if ($(idName1).length != 0) {
+      checkGemLine[4].push([$(idName1).attr("class").split(" ")[1], idName1]);
+    }
+    if ($(idName2).length != 0) {
+      checkGemLine[4].push([$(idName2).attr("class").split(" ")[1], idName2]);
+    }
+    
+    var idName3 = '#'+'row'+gem_location[0]+'col'+(parseInt(gem_location[1])-1);
+    var idName4 = '#'+'row'+gem_location[0]+'col'+(parseInt(gem_location[1])+1);
+    if ($(idName3).length != 0) {
+      checkGemLine[5].push([$(idName3).attr("class").split(" ")[1], idName3]);
+    }
+    if ($(idName4).length != 0) {
+      checkGemLine[5].push([$(idName4).attr("class").split(" ")[1], idName4]);
+    }
+    
+    // now check the checkGemLine array to see if any of them are gem lines
+    for (var i = 0; i < checkGemLine.length; i++) {
+      if (checkGemLine[i].length == 2) {
+        
+        if ((checkGemLine[i][0][0] == checkGemLine[i][1][0]) && (checkGemLine[i][1][0] == gem_color)) {
+          
+    
+          foundGemLine.push(checkGemLine[i][0][1]);
+          foundGemLine.push(checkGemLine[i][1][1]);
+        }
+      }
+    }
+    
+    if (foundGemLine.length <= 1) {
+      return true;
+    }
+    else {
+      return false;
     }
   };
   
@@ -178,6 +254,7 @@
     // if the gems are in the same column
     if (gemLocations[0][1] == gemLocations[1][1] && gemLocations[1][1] == gemLocations[2][1]) {
       this.replaceGems(gemLocations[1], 3);
+ 
       console.log("replacing gems in a column")
     }
     // else if the gems are in the same row
@@ -185,6 +262,7 @@
       this.replaceGems(gemLocations[0], 1);
       this.replaceGems(gemLocations[1], 1);
       this.replaceGems(gemLocations[2], 1);
+
       console.log("replacing gems in a row")
     }
   };
@@ -193,7 +271,6 @@
     
     var gem_row = parseInt(loc[0]);
     var gem_col = parseInt(loc[1]);
-    console.log(gem_row)
     var gem_to_replace = 8 - gem_row;
     
     for (var i = 0; i < gem_to_replace; i++) {
@@ -203,16 +280,31 @@
       
       if ($(gem2).length != 0) {
         var gem2_color = $(gem2).attr("class").split(" ")[1];
-        $(gem1).removeClass(gem1_color).addClass(gem2_color);      
+        $(gem1).removeClass(gem1_color).addClass(gem2_color);  
+        this.score += 1;
+        
       }
       else {
         var randomGem = this.gemList[Math.floor((Math.random()*5))];
-        $(gem1).removeClass(gem1_color).addClass(randomGem)
-        
+        $(gem1).removeClass(gem1_color).addClass(randomGem);
+        this.score += 1;
       }
-      // replace the gem class with the one above it
     }
     
+    this.checkNewGems(loc);
+  };
+  
+  Board.prototype.checkNewGems = function(loc) {
+    
+    var gem_row = parseInt(loc[0]);
+    var gem_col = parseInt(loc[1]);
+    var gem_to_replace = 8 - gem_row;
+    
+    for (var i = 0; i < gem_to_replace; i++) {
+      var gem = '#'+'row'+(parseInt(loc[0])+i)+'col'+loc[1];
+      
+      this.checkGemLine($(gem));
+    }
   };
 
 })(this);
