@@ -7,6 +7,7 @@
     this.renderGems();
     this.clickedGems = [];
     this.score = 0;
+    this.renderScore();
 	};
   
 	Board.prototype.renderBoard = function() {
@@ -18,7 +19,9 @@
 		}
 	};
   
-
+  Board.prototype.renderScore = function() {
+    $(".score").html(this.score);
+  };
 
 	Board.prototype.renderGems = function() {
     this.gemList = ["red", "green", "yellow", "silver", "orange", "pink"];    
@@ -96,15 +99,21 @@
     $(gem2).removeClass(gem2_color).addClass(gem1_color);
     
     if (this.noGemLine(gem1) && this.noGemLine(gem2)) {
-      console.log("no switch")
+      alert("you can't switch those gems!")
       $(gem1).removeClass(gem2_color).addClass(gem1_color);
       $(gem2).removeClass(gem1_color).addClass(gem2_color);
     }
     else {
+      this.increaseScore(3);
       this.checkGemLine(gem2);
       this.checkGemLine(gem1);
     }
 	};
+  
+  Board.prototype.increaseScore = function(numPoints) {
+    this.score += numPoints;
+    console.log(this.score)
+  };
   
   Board.prototype.checkGemLine = function(gem) {
 
@@ -144,6 +153,7 @@
     // check for the cases when the gem is in the middle
     var idName1 = '#'+'row'+(parseInt(gem_location[0])-1)+'col'+gem_location[1];
     var idName2 = '#'+'row'+(parseInt(gem_location[0])+1)+'col'+gem_location[1];
+    
     if ($(idName1).length != 0) {
       checkGemLine[4].push([$(idName1).attr("class").split(" ")[1], idName1]);
     }
@@ -162,13 +172,16 @@
     
     // now check the checkGemLine array to see if any of them are gem lines
     for (var i = 0; i < checkGemLine.length; i++) {
-      if (checkGemLine[i].length == 2) {
+      if (checkGemLine[i].length >= 2) {
         
         if ((checkGemLine[i][0][0] == checkGemLine[i][1][0]) && (checkGemLine[i][1][0] == gem_color)) {
-          
-    
           foundGemLine.push(checkGemLine[i][0][1]);
           foundGemLine.push(checkGemLine[i][1][1]);
+          // come back here
+          // for (var i = 1; i < 7; i++) {
+//             var gem_left = 
+//             if ()
+//           }
         }
       }
     }
@@ -315,6 +328,24 @@
       
       this.checkGemLine($(gem));
     }
+    // this.gameOver();
   };
+  
+  // Board.prototype.gameOver = function() {
+//     var gameOver = true;
+//     
+//     for (var i = 0; i < this.dimension; i++) {
+//       for (var j = 0; j < this.dimension; j++) {
+//         var idName = '#'+'row'+i+'col'+(this.dimension-1-j);
+//         gem = $(idName)
+//         
+//         if (!this.noGemLine(gem)) {
+//           console.log("game not over")
+//           gameOver = false;
+//         }
+//       }
+//     }
+//     console.log(gameOver);
+//   };
 
 })(this);

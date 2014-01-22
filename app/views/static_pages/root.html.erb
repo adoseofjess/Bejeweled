@@ -7,12 +7,15 @@
 			var board = new boardLib.Board();
       $(".tile").click(function(event) {
         board.handleClick(event);
+        board.renderScore();
       });
 		});
 	</script>
 </head>
 
 <body>
+  <div class="scoreboard">Score: <div class="score"></div>
+  </div>
 	<div class="board">
     
     

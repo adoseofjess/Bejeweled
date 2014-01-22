@@ -13,14 +13,23 @@
  */
 
 body {
-	background-color: rgb(197, 197, 197);
+/*  background-color: rgb(197, 197, 197);*/
+}
+
+.scoreboard {
+  float: right;
+	height:100px;
+	width:200px;
+  border: 2px solid rgb(197, 197, 197);
 }
 
 .board {
-	position:relative;
+	position:absolute;
 	height:288px;
 	width:288px;
-	margin: 0 auto;
+/*  margin: 0 auto;*/
+  margin-top: 10%;
+  margin-left: 35%;
 	background-color:white;
 }
 .tile {
