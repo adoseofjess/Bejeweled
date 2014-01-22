@@ -13,14 +13,55 @@
  */
 
 body {
-/*  background-color: rgb(197, 197, 197);*/
+  background-color: black;
+  font-family: 'Koufiya',Georgia,serif;
+}
+
+header {
+  height: 10%;
+  width: 100%;
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  display: block;
+  background: rgb(235, 235, 235);
+}
+
+.logo {
+  /*height: 100%;
+  width: 30%;*/
+  height: 125px;
+  width: 115px;
+  /*background-image: url('/images/versal-logo.png');
+  background-size: 142px 30px;*/
+  background: #fcf31b url(https://pirassets.s3.amazonaws.com/assets/shared/peek_sprite-38ec6c38f8ca7291cb982026eeda86e1.png) no-repeat 10px 64px;
+  margin-top: 15px;
+  margin-left: 15px;
+  float: left;
+/*  background: red;*/
+  display: inline-block;
+  font-size: 1.9em;
+  font-family: 'The Girl Next Door', cursive;  
+  color: #524e47;
+}
+
+.user-log-in {
+  height: 100%;
+  width: 30%;
+  float: right;
+/*  background: blue;*/
+  display: inline-block;
 }
 
 .scoreboard {
+  background-color: white;
   float: right;
 	height:100px;
 	width:200px;
+  margin-top: 100px;
+  margin-right: 50px;
   border: 2px solid rgb(197, 197, 197);
+  font-size: 1.7em;
 }
 
 .board {
@@ -39,26 +80,45 @@ body {
 	border:2px solid rgb(197, 197, 197);
 }
 
+
 .red {
   background-image:url('/assets/red_gem.png');
+
 }
 
 .green {
   background-image:url('/assets/green_gem.png');
+
 }
 
 .silver {
   background-image:url('/assets/white_gem.png');
+
 }
 
 .orange {
   background-image:url('/assets/orange_gem.png');
+
 }
 
 .pink {
   background-image:url('/assets/pink_gem.png');
+
 }
 
 .yellow {
   background-image:url('/assets/yellow_gem.png');
+
+}
+
+footer {
+  height: 10%;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0%;
+  background: rgb(235, 235, 235);
+  display: block;
+  text-align: center;
+  line-height: 100%;
 }

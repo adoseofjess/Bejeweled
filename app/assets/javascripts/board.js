@@ -10,7 +10,15 @@
     this.renderScore();
 	};
   
-	Board.prototype.renderBoard = function() {
+  Array.prototype.max = function() {
+    return Math.max.apply(null, this);
+  };
+
+  Array.prototype.min = function() {
+    return Math.min.apply(null, this);
+  };
+  
+  Board.prototype.renderBoard = function() {
 		for (var i = 0; i < this.dimension; i++) {
 			for (var j = 0; j < this.dimension; j++) {
 				var idName = 'row'+i+'col'+(this.dimension-1-j);
@@ -178,17 +186,96 @@
           foundGemLine.push(checkGemLine[i][0][1]);
           foundGemLine.push(checkGemLine[i][1][1]);
           // come back here
-          // for (var i = 1; i < 7; i++) {
-//             var gem_left = 
-//             if ()
-//           }
+          
+          
+          if ((foundGemLine.length != 1) && this.moreGems(foundGemLine, gem_color).length == 0) {
+            
+            this.removeGems(foundGemLine);
+          }
+          else if ((foundGemLine.length != 1) && this.moreGems(foundGemLine, gem_color).length != 0) {
+            this.increaseScore(this.moreGems(foundGemLine, gem_color).length);
+            this.removeGems(foundGemLine);
+            this.removeGems(this.moreGems(foundGemLine, gem_color));
+            
+          }
+        }
+      }
+    }
+  };
+  
+  Board.prototype.moreGems = function(foundGemLine, gem_color) {
+    var gemLocations = [];
+    var x_coords = [];
+    var y_coords = [];
+    var newGems = [];
+    foundGemLine.forEach(function(idName) {
+      gemLocations.push(idName.split("row")[1].split("col"));
+    });
+    
+    gemLocations.forEach(function(coordinates) {
+      x_coords.push(parseInt(coordinates[1]));
+      y_coords.push(parseInt(coordinates[0]));
+    });
+    
+    if (gemLocations[0][0] == gemLocations[1][0]) {
+      console.log("a row, changing 1 index")
+      for (var i = 1; i < 7; i++) { 
+        var idName1 = '#'+'row'+gemLocations[1][0]+'col'+(x_coords.max()+i);
+        
+        if ($(idName1).length != 0) {
+          if ($(idName1).attr("class").split(" ")[1] == gem_color) {
+            newGems.push(idName1);
+            
+          }
+          else {
+            break
+          } 
+        }
+      }
+      
+      for (var i = 1; i < 7; i++) {
+        var idName2 = '#'+'row'+gemLocations[1][0]+'col'+(x_coords.min()-i);
+        if ($(idName2).length != 0) {
+          if ($(idName2).attr("class").split(" ")[1] == gem_color) {
+            newGems.push(idName2);
+            
+          }
+          else {
+            break
+          }
+        }
+      }
+
+    }
+    else {
+      console.log("a col, changing 0 index")
+      for (var i = 1; i < 7; i++) { 
+        var idName1 = '#'+'row'+(y_coords.max()+i)+'col'+gemLocations[1][1];
+        if ($(idName1).length != 0) {
+          if ($(idName1).attr("class").split(" ")[1] == gem_color) {
+            newGems.push(idName1);
+            
+          }
+          else {
+            break
+          }
+        }
+        
+        var idName2 = '#'+'row'+(y_coords.min()-i)+'col'+gemLocations[1][1];
+        if ($(idName2).length != 0) {
+          if ($(idName2).attr("class").split(" ")[1] == gem_color) {
+            newGems.push(idName2);
+            
+          }
+          else {
+            break
+          }
         }
       }
     }
     
-    if (foundGemLine.length != 1) {
-      this.removeGems(foundGemLine);
-    }
+    return newGems;
+    
   };
   
   Board.prototype.noGemLine = function(gem) {
@@ -266,13 +353,15 @@
     }
   };
   
-  Board.prototype.removeGems = function(foundGemLine) {
+  Board.prototype.removeGems = function(foundGemLine) {    
     var gemLocations = [];
     foundGemLine.forEach(function(coordinates) {
     gemLocations.push(coordinates.split("row")[1].split("col"));
     });
     
-
+    if (gemLocations.length == 1) {
+      this.replaceGems(gemLocations[0], 1);
+    }
     
     // if the gems are in the same column
     if (gemLocations[0][1] == gemLocations[1][1] && gemLocations[1][1] == gemLocations[2][1]) {
@@ -310,7 +399,6 @@
       else {
         var randomGem = this.gemList[Math.floor((Math.random()*5))];
         $(gem1).removeClass(gem1_color).addClass(randomGem);
-
       }
     }
     
@@ -330,22 +418,5 @@
     }
     // this.gameOver();
   };
-  
-  // Board.prototype.gameOver = function() {
-//     var gameOver = true;
-//     
-//     for (var i = 0; i < this.dimension; i++) {
-//       for (var j = 0; j < this.dimension; j++) {
-//         var idName = '#'+'row'+i+'col'+(this.dimension-1-j);
-//         gem = $(idName)
-//         
-//         if (!this.noGemLine(gem)) {
-//           console.log("game not over")
-//           gameOver = false;
-//         }
-//       }
-//     }
-//     console.log(gameOver);
-//   };
 
 })(this);
