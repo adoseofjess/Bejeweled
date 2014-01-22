@@ -96,7 +96,6 @@
     this.checkGemLine(gem1);
 	};
   
-  // come back
   Board.prototype.checkGemLine = function(gem) {
 
     var gem_location = gem.attr("id").split("row")[1].split("col");
@@ -178,19 +177,41 @@
     
     // if the gems are in the same column
     if (gemLocations[0][1] == gemLocations[1][1] && gemLocations[1][1] == gemLocations[2][1]) {
-      this.replaceGems(gemLocations[1][1], 3);
+      this.replaceGems(gemLocations[1], 3);
       console.log("replacing gems in a column")
     }
     // else if the gems are in the same row
     else {
-      this.replaceGems(gemLocations[0][1], 1);
-      this.replaceGems(gemLocations[1][1], 1);
-      this.replaceGems(gemLocations[2][1], 1);
+      this.replaceGems(gemLocations[0], 1);
+      this.replaceGems(gemLocations[1], 1);
+      this.replaceGems(gemLocations[2], 1);
       console.log("replacing gems in a row")
     }
   };
   
-  Board.prototype.replaceGems = function(col, numGems) {
+  Board.prototype.replaceGems = function(loc, numGems) {
+    
+    var gem_row = parseInt(loc[0]);
+    var gem_col = parseInt(loc[1]);
+    console.log(gem_row)
+    var gem_to_replace = 8 - gem_row;
+    
+    for (var i = 0; i < gem_to_replace; i++) {
+      var gem1 = '#'+'row'+(parseInt(loc[0])+i)+'col'+loc[1];
+      var gem1_color = $(gem1).attr("class").split(" ")[1];
+      var gem2 = '#'+'row'+(parseInt(loc[0])+numGems+i)+'col'+loc[1];
+      
+      if ($(gem2).length != 0) {
+        var gem2_color = $(gem2).attr("class").split(" ")[1];
+        $(gem1).removeClass(gem1_color).addClass(gem2_color);      
+      }
+      else {
+        var randomGem = this.gemList[Math.floor((Math.random()*5))];
+        $(gem1).removeClass(gem1_color).addClass(randomGem)
+        
+      }
+      // replace the gem class with the one above it
+    }
     
   };
 
