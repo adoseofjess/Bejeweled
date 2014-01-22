@@ -94,8 +94,16 @@
     
     $(gem1).removeClass(gem1_color).addClass(gem2_color);
     $(gem2).removeClass(gem2_color).addClass(gem1_color);
-    this.checkGemLine(gem2);
-    this.checkGemLine(gem1);
+    
+    if (this.noGemLine(gem1) && this.noGemLine(gem2)) {
+      console.log("no switch")
+      $(gem1).removeClass(gem2_color).addClass(gem1_color);
+      $(gem2).removeClass(gem1_color).addClass(gem2_color);
+    }
+    else {
+      this.checkGemLine(gem2);
+      this.checkGemLine(gem1);
+    }
 	};
   
   Board.prototype.checkGemLine = function(gem) {
@@ -251,6 +259,8 @@
     gemLocations.push(coordinates.split("row")[1].split("col"));
     });
     
+
+    
     // if the gems are in the same column
     if (gemLocations[0][1] == gemLocations[1][1] && gemLocations[1][1] == gemLocations[2][1]) {
       this.replaceGems(gemLocations[1], 3);
@@ -281,13 +291,13 @@
       if ($(gem2).length != 0) {
         var gem2_color = $(gem2).attr("class").split(" ")[1];
         $(gem1).removeClass(gem1_color).addClass(gem2_color);  
-        this.score += 1;
+
         
       }
       else {
         var randomGem = this.gemList[Math.floor((Math.random()*5))];
         $(gem1).removeClass(gem1_color).addClass(randomGem);
-        this.score += 1;
+
       }
     }
     
