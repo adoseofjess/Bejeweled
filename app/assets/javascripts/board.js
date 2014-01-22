@@ -181,22 +181,16 @@
     // now check the checkGemLine array to see if any of them are gem lines
     for (var i = 0; i < checkGemLine.length; i++) {
       if (checkGemLine[i].length >= 2) {
-        
         if ((checkGemLine[i][0][0] == checkGemLine[i][1][0]) && (checkGemLine[i][1][0] == gem_color)) {
           foundGemLine.push(checkGemLine[i][0][1]);
           foundGemLine.push(checkGemLine[i][1][1]);
-          // come back here
-          
-          
           if ((foundGemLine.length != 1) && this.moreGems(foundGemLine, gem_color).length == 0) {
-            
             this.removeGems(foundGemLine);
           }
           else if ((foundGemLine.length != 1) && this.moreGems(foundGemLine, gem_color).length != 0) {
             this.increaseScore(this.moreGems(foundGemLine, gem_color).length);
             this.removeGems(foundGemLine);
             this.removeGems(this.moreGems(foundGemLine, gem_color));
-            
           }
         }
       }
@@ -273,7 +267,6 @@
         }
       }
     }
-    
     return newGems;
     
   };
